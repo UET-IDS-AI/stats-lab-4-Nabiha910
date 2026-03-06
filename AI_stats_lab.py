@@ -74,17 +74,42 @@ def exponential_probabilities():
 # =========================================================
 
 def gaussian_probabilities():
+    """
+    X ~ N(10,2^2)
 
-    mu = 10
-    sigma = 2
+    STEP 1
+    Standardize variable
 
-    analytic_le12 = norm.cdf(12, mu, sigma)
-    analytic_interval = norm.cdf(12, mu, sigma) - norm.cdf(8, mu, sigma)
+        Z = (X - 10)/2
 
-    n = 100000
-    samples = np.random.normal(mu, sigma, n)
+    STEP 2
+    Compute analytically
+
+        P(X ≤ 12)
+        P(8 < X < 12)
+
+    STEP 3
+    Simulate 100000 samples
+
+    STEP 4
+    Estimate probabilities
+
+    RETURN
+
+        analytic_le12
+        analytic_interval
+        simulated_le12
+        simulated_interval
+    """
+
+    # Analytical probabilities
+    analytic_le12 = norm.cdf(12, loc=10, scale=2)
+    analytic_interval = norm.cdf(12, loc=10, scale=2) - norm.cdf(8, loc=10, scale=2)
+
+    # Simulation
+    samples = np.random.normal(loc=10, scale=2, size=100000)
 
     simulated_le12 = np.mean(samples <= 12)
     simulated_interval = np.mean((samples > 8) & (samples < 12))
 
-    return analytic_le12, analytic_interval, simulated_le12, simulated_intervalmplementedError
+    return analytic_le12, analytic_interval, simulated_le12, simulated_interval
