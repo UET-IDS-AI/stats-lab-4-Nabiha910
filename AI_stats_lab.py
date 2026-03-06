@@ -9,35 +9,22 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm
 from scipy.integrate import quad
 
-
 # =========================================================
 # QUESTION 1 — CDF Probabilities
 # =========================================================
 
 def cdf_probabilities():
-    """
-    STEP 1
-    Compute analytically
 
-        P(X > 5)
-        P(X < 5)
-        P(3 < X < 7)
+    analytic_gt5 = np.exp(-5)
+    analytic_lt5 = 1 - np.exp(-5)
+    analytic_interval = np.exp(-3) - np.exp(-7)
 
-    STEP 2
-    Simulate 100000 samples from Exp(1)
+    n = 100000
+    samples = np.random.exponential(scale=1, size=n)
 
-    STEP 3
-    Estimate P(X > 5) using simulation
+    simulated_gt5 = np.mean(samples > 5)
 
-    RETURN
-
-        analytic_gt5
-        analytic_lt5
-        analytic_interval
-        simulated_gt5
-    """
-
-    raise NotImplementedError
+    return analytic_gt5, analytic_lt5, analytic_interval, simulated_gt5
 
 
 # =========================================================
@@ -45,32 +32,23 @@ def cdf_probabilities():
 # =========================================================
 
 def pdf_validation_plot():
-    """
-    Candidate PDF
 
-        f(x) = 2x e^{-x^2} for x >= 0
+    f = lambda x: 2 * x * np.exp(-x**2)
 
-    STEP 1
-    Verify non-negativity
+    integral_value, _ = quad(f, 0, np.inf)
 
-    STEP 2
-    Compute
+    is_valid_pdf = bool(np.isclose(integral_value, 1.0))
 
-        integral_0^∞ f(x) dx
+    x = np.linspace(0, 3, 400)
+    y = f(x)
 
-    STEP 3
-    Determine if valid PDF
+    plt.plot(x, y)
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
+    plt.title("PDF: f(x) = 2x e^{-x^2}")
+    # plt.show()
 
-    STEP 4
-    Plot f(x) on [0,3]
-
-    RETURN
-
-        integral_value
-        is_valid_pdf
-    """
-
-    raise NotImplementedError
+    return integral_value, is_valid_pdf
 
 
 # =========================================================
@@ -78,30 +56,17 @@ def pdf_validation_plot():
 # =========================================================
 
 def exponential_probabilities():
-    """
-    X ~ Exp(1)
 
-    STEP 1
-    Compute analytically
+    analytic_gt5 = np.exp(-5)
+    analytic_interval = np.exp(-1) - np.exp(-3)
 
-        P(X > 5)
-        P(1 < X < 3)
+    n = 100000
+    samples = np.random.exponential(scale=1, size=n)
 
-    STEP 2
-    Simulate 100000 samples
+    simulated_gt5 = np.mean(samples > 5)
+    simulated_interval = np.mean((samples > 1) & (samples < 3))
 
-    STEP 3
-    Estimate probabilities using simulation
-
-    RETURN
-
-        analytic_gt5
-        analytic_interval
-        simulated_gt5
-        simulated_interval
-    """
-
-    raise NotImplementedError
+    return analytic_gt5, analytic_interval, simulated_gt5, simulated_interval
 
 
 # =========================================================
@@ -109,32 +74,17 @@ def exponential_probabilities():
 # =========================================================
 
 def gaussian_probabilities():
-    """
-    X ~ N(10,2^2)
 
-    STEP 1
-    Standardize variable
+    mu = 10
+    sigma = 2
 
-        Z = (X - 10)/2
+    analytic_le12 = norm.cdf(12, mu, sigma)
+    analytic_interval = norm.cdf(12, mu, sigma) - norm.cdf(8, mu, sigma)
 
-    STEP 2
-    Compute analytically
+    n = 100000
+    samples = np.random.normal(mu, sigma, n)
 
-        P(X ≤ 12)
-        P(8 < X < 12)
+    simulated_le12 = np.mean(samples <= 12)
+    simulated_interval = np.mean((samples > 8) & (samples < 12))
 
-    STEP 3
-    Simulate 100000 samples
-
-    STEP 4
-    Estimate probabilities
-
-    RETURN
-
-        analytic_le12
-        analytic_interval
-        simulated_le12
-        simulated_interval
-    """
-
-    raise NotImplementedError
+    return analytic_le12, analytic_interval, simulated_le12, simulated_intervalmplementedError
